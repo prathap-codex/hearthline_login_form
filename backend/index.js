@@ -2,9 +2,16 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://frontend-sand-six-37.vercel.app",
+    ],
+  })
+);
 app.use(express.json());
 
 const MOCK_USER = {
@@ -13,6 +20,10 @@ const MOCK_USER = {
   name: "Prathap",
   role: "Studio lead",
 };
+
+app.get("/", (req, res) => {
+  res.json({ ok: true, service: "Hearthline API" });
+});
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body ?? {};
@@ -45,6 +56,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Hearthline API running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Hearthline API running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

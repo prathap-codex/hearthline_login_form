@@ -45,7 +45,8 @@ function App() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("/api/login", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const response = await axios.post(`${apiUrl}/login`, {
         email: email.trim(),
         password,
       });
